@@ -1,11 +1,15 @@
+import { headers } from "next/headers";
 import { getTopHeadlines } from "@/lib/news";
 import { NewsCard } from "@/components/NewsCard";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/seo";
+import { detectCountry } from "@burrowsoft/shared";
 
 export const revalidate = 900;
 
 export default async function HomePage() {
-  const articles = await getTopHeadlines(30);
+  const hdrs = await headers();
+  const country = detectCountry(Object.fromEntries(hdrs.entries()));
+  const articles = await getTopHeadlines(country, 30);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
