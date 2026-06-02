@@ -25,11 +25,13 @@ When `locale=th` the `/api/news` route:
 
 ### Thai affiliate ads
 
-`LazadaFloatingAd` component rendered in layout (inside `NextIntlClientProvider`).
-Visible only when `useLocale() === "th"`, dismissible per session.
-Links:
+Shared `RegionalFloatingAd` (from `@burrowsoft/shared`) rendered in `layout.tsx` inside `NextIntlClientProvider`.
+Visible only when `useLocale() === "th"` (keyed off `REGIONAL_ADS["th"]` in the shared config), dismissible per session.
+Links configured centrally in `packages/shared/src/components/RegionalFloatingAd.tsx`:
 - `https://s.lazada.co.th/s.ZhTKMF?c=b&t=p-i6RvCVf-sRab381`
 - `https://s.lazada.co.th/s.ZhTKLe?c=a&t=p-iHa6GOt-s2EYQBV0`
+
+To update ad copy or add new links: edit `REGIONAL_ADS["th"]` in the shared package and re-sync to all apps.
 
 ---
 

@@ -6,8 +6,7 @@ import { Sarabun } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { LanguageSelector } from "@burrowsoft/shared";
-import { LazadaFloatingAd } from "@/components/LazadaFloatingAd";
+import { LanguageSelector, RegionalFloatingAd } from "@burrowsoft/shared";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -109,7 +108,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </header>
 
           <main>{children}</main>
-          <LazadaFloatingAd />
+          <RegionalFloatingAd />
 
           <footer className="mt-16 border-t border-slate-200 bg-white">
             <div className="mx-auto max-w-7xl px-4 py-10 space-y-8">
