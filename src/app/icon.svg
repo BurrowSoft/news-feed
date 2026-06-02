@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="8" fill="#4f46e5"/>
+  <!-- mole head scaled to 32x32, approximate: head circle centre ~16,13, radius ~9 -->
+  <g transform="translate(-12.5, -8) scale(0.45)" fill="white" stroke="#c7d2fe" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Crown puffs -->
+    <circle cx="91" cy="28" r="5" stroke-width="2.5"/>
+    <circle cx="100" cy="22" r="6" stroke-width="2.5"/>
+    <circle cx="109" cy="28" r="5" stroke-width="2.5"/>
+    <!-- Head -->
+    <circle cx="100" cy="83" r="57" stroke-width="3"/>
+    <!-- Left lens -->
+    <circle cx="81" cy="89" r="19" stroke-width="3.5"/>
+    <!-- Right lens -->
+    <circle cx="119" cy="89" r="19" stroke-width="3.5"/>
+    <!-- Bridge -->
+    <line x1="100" y1="87" x2="100" y2="92" stroke-width="2.5"/>
+    <!-- Temple arms -->
+    <line x1="62" y1="89" x2="52" y2="89" stroke-width="2.5"/>
+    <line x1="138" y1="89" x2="148" y2="89" stroke-width="2.5"/>
+    <!-- Left pupil -->
+    <circle cx="81" cy="89" r="9" fill="#312e81" stroke="none"/>
+    <circle cx="84" cy="86" r="3.5" fill="white" stroke="none"/>
+    <!-- Right pupil -->
+    <circle cx="119" cy="89" r="9" fill="#312e81" stroke="none"/>
+    <circle cx="122" cy="86" r="3.5" fill="white" stroke="none"/>
+  </g>
+</svg>

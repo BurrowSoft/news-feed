@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/VICTUS/Desktop/burrowsoft-web-apps/main-website/public/**)",
+      "Read(//c/Users/VICTUS/Desktop/burrowsoft-web-apps/**)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\VICTUS\\Desktop\\burrowsoft-web-apps"
+    ]
+  }
+}

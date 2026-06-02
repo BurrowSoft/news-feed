@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/seo";
 import "./globals.css";
@@ -22,11 +23,17 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: `${SITE_NAME} — Trending News & Top Headlines`,
     description: SITE_DESCRIPTION,
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${SITE_NAME}` }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE_NAME} — Trending News & Top Headlines`,
     description: SITE_DESCRIPTION,
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   robots: {
     index: true,
@@ -47,6 +54,14 @@ export const viewport: Viewport = {
   themeColor: "#4f46e5",
 };
 
+const SIBLING_PRODUCTS = [
+  { name: "FlyMole", href: "https://flymole.com" },
+  { name: "BookingMole", href: "https://bookingmole.com" },
+  { name: "RentACarMole", href: "https://rentacarmole.com" },
+  { name: "GamesMole", href: "https://gamesmole.com" },
+  { name: "ShoppingMole", href: "https://shoppingmole.com" },
+];
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
@@ -66,7 +81,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             aria-label="Main navigation"
           >
             <Link href="/" className="flex items-center gap-2 text-xl font-bold text-indigo-600">
-              <span aria-hidden>🔍</span>
+              <Image src="/mascot.svg" alt="" width={28} height={28} aria-hidden />
               {SITE_NAME}
             </Link>
             <span className="text-xs text-slate-400">Updated every 15 min</span>
@@ -76,27 +91,50 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <main>{children}</main>
 
         <footer className="mt-16 border-t border-slate-200 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-            <p className="font-semibold text-indigo-600">{SITE_NAME}</p>
-            <p className="text-xs text-slate-400">
-              News powered by{" "}
+          <div className="mx-auto max-w-7xl px-4 py-10 space-y-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <a
-                href="https://newsapi.org"
+                href="https://burrowsoft.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline hover:text-indigo-600"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                aria-label="BurrowSoft"
               >
-                NewsAPI
+                <Image
+                  src="/burrowsoft-logo.svg"
+                  alt="BurrowSoft"
+                  width={160}
+                  height={32}
+                  unoptimized
+                />
               </a>
-            </p>
-            <div className="flex items-center gap-6">
-              <a
-                href="mailto:support@insightmole.com"
-                className="hover:text-indigo-600 transition-colors"
-              >
-                support@insightmole.com
-              </a>
-              <p>© {new Date().getFullYear()} InsightMole</p>
+
+              <nav aria-label="BurrowSoft products" className="flex flex-wrap gap-4 text-sm text-slate-500">
+                {SIBLING_PRODUCTS.map((p) => (
+                  <a
+                    key={p.name}
+                    href={p.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-indigo-600 transition-colors"
+                  >
+                    {p.name}
+                  </a>
+                ))}
+              </nav>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 pt-6 text-xs text-slate-400">
+              <p>© 2025 BurrowSoft. All rights reserved.</p>
+              <div className="flex items-center gap-4">
+                <a
+                  href="mailto:support@insightmole.com"
+                  className="hover:text-indigo-600 transition-colors"
+                >
+                  support@insightmole.com
+                </a>
+                <span>News powered by GNews, The Guardian &amp; NewsAPI</span>
+              </div>
             </div>
           </div>
         </footer>
