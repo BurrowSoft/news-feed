@@ -15,6 +15,9 @@
   },
   "article": {
     "readOn": "Read on {source}",
+    "readFull": "Read full article on {source}",
+    "backTo": "Back to {siteName}",
+    "via": "via {provider}",
     "loading": "Loading news from {provider}…",
     "unavailable": "{provider} unavailable",
     "noneFound": "No articles found.",

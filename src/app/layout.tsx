@@ -6,7 +6,8 @@ import { Sarabun } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { LanguageSelector } from "@/components/LanguageSelector";
+import { LanguageSelector } from "@burrowsoft/shared";
+import { LazadaFloatingAd } from "@/components/LazadaFloatingAd";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -102,12 +103,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               </Link>
               <div className="flex items-center gap-3">
                 <span className="hidden sm:block text-xs text-slate-400">Updated every 15 min</span>
-                <LanguageSelector currentLocale={locale} />
+                <LanguageSelector locales={["en", "th"]} />
               </div>
             </nav>
           </header>
 
           <main>{children}</main>
+          <LazadaFloatingAd />
 
           <footer className="mt-16 border-t border-slate-200 bg-white">
             <div className="mx-auto max-w-7xl px-4 py-10 space-y-8">

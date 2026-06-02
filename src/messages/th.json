@@ -15,6 +15,9 @@
   },
   "article": {
     "readOn": "อ่านที่ {source}",
+    "readFull": "อ่านบทความฉบับเต็มที่ {source}",
+    "backTo": "กลับไปที่ {siteName}",
+    "via": "ผ่าน {provider}",
     "loading": "กำลังโหลดข่าวจาก {provider}…",
     "unavailable": "{provider} ไม่พร้อมใช้งาน",
     "noneFound": "ไม่พบบทความ",

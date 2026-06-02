@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { SITE_NAME } from "@/lib/seo";
 
 function decodeArticleId(id: string): string {
   const base64 = id.replace(/-/g, "+").replace(/_/g, "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-  // Encoded with btoa(encodeURIComponent(url)) in NewsCard — reverse with decodeURIComponent(atob())
   return decodeURIComponent(atob(padded));
 }
 
@@ -38,10 +38,11 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 export default async function ArticlePage({ params, searchParams }: PageProps) {
   const { id } = await params;
   const sp = await searchParams;
+  const t = await getTranslations("article");
 
   const articleUrl = decodeArticleId(id);
   const publishedDate = sp.publishedAt
-    ? new Date(sp.publishedAt).toLocaleDateString("en-US", {
+    ? new Date(sp.publishedAt).toLocaleDateString(undefined, {
         weekday: "long",
         year: "numeric",
         month: "long",
@@ -60,7 +61,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
         <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden>
           <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
-        Back to {SITE_NAME}
+        {t("backTo", { siteName: SITE_NAME })}
       </Link>
 
       <article>
@@ -85,7 +86,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
           )}
           {sp.provider && sp.provider !== sp.source && (
             <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-500">
-              via {sp.provider}
+              {t("via", { provider: sp.provider })}
             </span>
           )}
           {publishedDate && (
@@ -107,7 +108,7 @@ export default async function ArticlePage({ params, searchParams }: PageProps) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow hover:bg-indigo-700 transition-colors"
         >
-          Read full article on {sp.source ?? "source"}
+          {t("readFull", { source: sp.source ?? "source" })}
           <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden>
             <path d="M3.5 12.5 12.5 3.5M7.5 3.5h5v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
