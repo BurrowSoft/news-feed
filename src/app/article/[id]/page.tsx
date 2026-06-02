@@ -6,7 +6,8 @@ import { SITE_NAME } from "@/lib/seo";
 function decodeArticleId(id: string): string {
   const base64 = id.replace(/-/g, "+").replace(/_/g, "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-  return Buffer.from(padded, "base64").toString("utf-8");
+  // Encoded with btoa(encodeURIComponent(url)) in NewsCard — reverse with decodeURIComponent(atob())
+  return decodeURIComponent(atob(padded));
 }
 
 interface PageProps {

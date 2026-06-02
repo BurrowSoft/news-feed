@@ -1,0 +1,25 @@
+{
+  "nav": { "home": "InsightMole", "feed": "ฟีดข่าว" },
+  "hero": {
+    "title": "รู้ทันข่าว ไม่มีสิ่งรบกวน",
+    "subtitle": "ข่าวเด่นจากแหล่งข่าวที่เชื่อถือได้ทั่วโลก"
+  },
+  "categories": {
+    "top": "ข่าวเด่น",
+    "business": "ธุรกิจ",
+    "technology": "เทคโนโลยี",
+    "sports": "กีฬา",
+    "entertainment": "บันเทิง",
+    "health": "สุขภาพ",
+    "science": "วิทยาศาสตร์"
+  },
+  "article": {
+    "readOn": "อ่านที่ {source}",
+    "loading": "กำลังโหลดข่าวจาก {provider}…",
+    "unavailable": "{provider} ไม่พร้อมใช้งาน",
+    "noneFound": "ไม่พบบทความ",
+    "aiSummary": "สรุปข่าวโดย AI",
+    "poweredBy": "ขับเคลื่อนโดย gpt-4o-mini"
+  },
+  "footer": { "tagline": "ค้นหาลึก สร้างสรรค์โซลูชัน" }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { ProviderResult } from "@/app/api/news/route";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function NewsLoadingOverlay({ providers, results, visible }: Props) {
+  const t = useTranslations("article");
   const [opacity, setOpacity] = useState(1);
 
   useEffect(() => {
@@ -65,8 +67,8 @@ export function NewsLoadingOverlay({ providers, results, visible }: Props) {
                   }
                 >
                   {settled && result?.error
-                    ? `${name} unavailable`
-                    : `Loading news from ${name}…`}
+                    ? t("unavailable", { provider: name })
+                    : t("loading", { provider: name })}
                 </span>
               </li>
             );

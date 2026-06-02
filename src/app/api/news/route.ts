@@ -27,14 +27,23 @@ const VALID_CATEGORIES = new Set<NewsCategory>([
 
 async function fetchNews(
   category: NewsCategory,
-  country: string
+  country: string,
+  locale: string
 ): Promise<NewsApiResponse> {
+  const isThai = locale === "th";
+  const language = isThai ? "th" : "en";
+  const effectiveCountry = isThai ? "TH" : country;
+
   const router = createNewsRouter();
-  const providers = router.getProvidersForCountry(country);
+  const allProviders = router.getProvidersForCountry(effectiveCountry);
+
+  // The Guardian has no Thai content — skip it when locale is th
+  const providers = isThai
+    ? allProviders.filter((p) => p.name !== "The Guardian")
+    : allProviders;
 
   const pageSize = 30;
-  const language = "en";
-  const params = { pageSize, country, language, category };
+  const params = { pageSize, country: effectiveCountry, language, category };
 
   const results = await Promise.allSettled(
     providers.map((p) => p.search(params))
@@ -52,7 +61,7 @@ async function fetchNews(
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === "fulfilled")
     .flatMap((r) => r.value);
 
-  const summary = await summarize("news", articles, country);
+  const summary = await summarize("news", articles, effectiveCountry);
 
   return { articles, providers: providerResults, summary };
 }
@@ -61,15 +70,17 @@ export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const rawCategory = searchParams.get("category") ?? "general";
   const country = searchParams.get("country") ?? "US";
+  const locale = searchParams.get("locale") ?? "en";
 
   const category: NewsCategory = VALID_CATEGORIES.has(rawCategory as NewsCategory)
     ? (rawCategory as NewsCategory)
     : "general";
 
-  const cacheKey = `news:${category}:${country}`;
+  const validLocale = locale === "th" ? "th" : "en";
+  const cacheKey = `news:${category}:${country}:${validLocale}`;
 
   const getCached = unstable_cache(
-    () => fetchNews(category, country),
+    () => fetchNews(category, country, validLocale),
     [cacheKey],
     { revalidate: 900 }
   );

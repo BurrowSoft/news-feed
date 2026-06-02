@@ -1,29 +1,36 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { NewsCard } from "./NewsCard";
 import { NewsLoadingOverlay } from "./NewsLoadingOverlay";
 import { AISummaryCard } from "./AISummaryCard";
 import type { NewsArticle, NewsCategory, AISummary } from "@burrowsoft/shared";
 import type { ProviderResult } from "@/app/api/news/route";
 
-const CATEGORIES: { value: NewsCategory; label: string }[] = [
-  { value: "general", label: "Top Stories" },
-  { value: "business", label: "Business" },
-  { value: "technology", label: "Technology" },
-  { value: "sports", label: "Sports" },
-  { value: "entertainment", label: "Entertainment" },
-  { value: "health", label: "Health" },
-  { value: "science", label: "Science" },
+type CategoryKey = "top" | "business" | "technology" | "sports" | "entertainment" | "health" | "science";
+
+const CATEGORY_MAP: { value: NewsCategory; key: CategoryKey }[] = [
+  { value: "general", key: "top" },
+  { value: "business", key: "business" },
+  { value: "technology", key: "technology" },
+  { value: "sports", key: "sports" },
+  { value: "entertainment", key: "entertainment" },
+  { value: "health", key: "health" },
+  { value: "science", key: "science" },
 ];
 
 const KNOWN_PROVIDERS = ["GNews", "The Guardian", "NewsAPI"];
 
 interface Props {
   country: string;
+  locale: string;
 }
 
-export function NewsFeed({ country }: Props) {
+export function NewsFeed({ country, locale }: Props) {
+  const t = useTranslations("categories");
+  const tArticle = useTranslations("article");
+
   const [category, setCategory] = useState<NewsCategory>("general");
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [summary, setSummary] = useState<AISummary | null>(null);
@@ -39,7 +46,9 @@ export function NewsFeed({ country }: Props) {
       setLoading(true);
 
       try {
-        const res = await fetch(`/api/news?category=${cat}&country=${country}`);
+        const res = await fetch(
+          `/api/news?category=${cat}&country=${country}&locale=${locale}`
+        );
         if (!res.ok) throw new Error("fetch failed");
         const data: { articles: NewsArticle[]; providers: ProviderResult[]; summary: AISummary | null } =
           await res.json();
@@ -59,7 +68,7 @@ export function NewsFeed({ country }: Props) {
         }, 900);
       }
     },
-    [country]
+    [country, locale]
   );
 
   useEffect(() => {
@@ -80,8 +89,8 @@ export function NewsFeed({ country }: Props) {
         visible={overlayVisible}
       />
 
-      <div className="mb-6 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {CATEGORIES.map(({ value, label }) => (
+      <div className="mb-6 flex gap-2 overflow-x-auto pb-1">
+        {CATEGORY_MAP.map(({ value, key }) => (
           <button
             key={value}
             onClick={() => handleCategoryChange(value)}
@@ -92,7 +101,7 @@ export function NewsFeed({ country }: Props) {
                 : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-300 hover:text-indigo-600",
             ].join(" ")}
           >
-            {label}
+            {t(key)}
           </button>
         ))}
       </div>
@@ -101,7 +110,7 @@ export function NewsFeed({ country }: Props) {
 
       {!loading && articles.length === 0 ? (
         <div className="flex min-h-64 items-center justify-center rounded-xl border border-dashed border-slate-300 text-slate-400">
-          No headlines available right now. Check back soon.
+          {tArticle("noneFound")}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

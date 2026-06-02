@@ -102,3 +102,50 @@ The `NewsCard` source badge should show "Bangkok Post", "NewsData", "MediaStack"
 
 ### 6. Sync packages/shared to all apps after changes
 After editing any shared news provider file, copy `packages/shared/` to: flight-booking, hotel-booking, rent-a-car, main-website, games, shopping.
+
+---
+
+## Brazil Region (country === "BR")
+
+### What the user needs to arrange
+
+| Source | Registration | Notes |
+|---|---|---|
+| **NewsData.io** | https://newsdata.io/ | Same registration as Thailand. Pass `country=br&language=pt` for Portuguese Brazilian news. 200 req/day free. |
+| **MediaStack** | https://mediastack.com/ | Same registration as Thailand. Pass `countries=br&languages=pt`. 500 req/month free. |
+| **G1 RSS (Globo)** | No registration | Free RSS feeds. Breaking news, business, tech, sports, etc. Brazilian Portuguese. |
+
+New env vars: none needed beyond what Thailand already requires (`NEWSDATA_API_KEY`, `MEDIASTACK_API_KEY` — same keys work for Brazil).
+
+### G1RSSProvider (implement first — free, no key)
+File: `packages/shared/src/providers/news/g1rss.ts`
+
+G1 RSS feeds:
+- Breaking news: `https://g1.globo.com/rss/g1/index.xml`
+- Economy: `https://g1.globo.com/rss/g1/economia/index.xml`
+- Technology: `https://g1.globo.com/rss/g1/tecnologia/index.xml`
+- Sports: `https://g1.globo.com/rss/g1/esportes/index.xml`
+- Politics: `https://g1.globo.com/rss/g1/politica/index.xml`
+- Health: `https://g1.globo.com/rss/g1/bemestar/index.xml`
+
+Implementation: same pattern as `BangkokPostRSSProvider` — fetch XML, parse with `fast-xml-parser`, normalize to `NewsArticle` DTO.
+- `source.name` = "G1 Globo"
+- `language` = "pt"
+- Cache: `next: { revalidate: 900 }`
+
+### Update createNewsRouter for Brazil
+```ts
+if (country === "BR") {
+  providers.push(new G1RSSProvider());  // always, no key
+  if (process.env.NEWSDATA_API_KEY)
+    providers.push(new NewsDataProvider(process.env.NEWSDATA_API_KEY, "BR", "pt"));
+  if (process.env.MEDIASTACK_API_KEY)
+    providers.push(new MediaStackProvider(process.env.MEDIASTACK_API_KEY, "br", "pt"));
+}
+```
+
+### NewsData + MediaStack Brazil params
+Both providers already implemented for Thailand (tasks 2 + 3 above). Extend them to accept a `language` param:
+- NewsData: add `language=pt` when country is BR
+- MediaStack: add `languages=pt` when country is BR
+- The Guardian: skip for Brazil (no Portuguese content)

@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import type { AISummary } from "@burrowsoft/shared";
 
 interface Props {
@@ -6,6 +9,8 @@ interface Props {
 }
 
 export function AISummaryCard({ summary, loading }: Props) {
+  const t = useTranslations("article");
+
   if (loading) {
     return (
       <div className="mb-8 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5 animate-pulse">
@@ -29,10 +34,10 @@ export function AISummaryCard({ summary, loading }: Props) {
     <div className="mb-8 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5">
       <div className="mb-2 flex items-center gap-2">
         <span className="text-xs font-semibold uppercase tracking-wide text-indigo-500">
-          AI Briefing
+          {t("aiSummary")}
         </span>
         <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-xs text-indigo-600">
-          gpt-4o-mini
+          {t("poweredBy")}
         </span>
       </div>
 

@@ -1,12 +1,21 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { NewsArticle } from "@burrowsoft/shared";
 
 function encodeArticleId(url: string): string {
-  return Buffer.from(url).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+  // encodeURIComponent handles non-ASCII; btoa is available in both browser and Node 18+
+  return btoa(encodeURIComponent(url))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=/g, "");
 }
 
 export function NewsCard({ article }: { article: NewsArticle }) {
+  const t = useTranslations("article");
+
   const date = new Date(article.publishedAt).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -72,7 +81,7 @@ export function NewsCard({ article }: { article: NewsArticle }) {
             className="inline-flex items-center gap-1 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700 transition-colors"
             onClick={(e) => e.stopPropagation()}
           >
-            Read on {article.source}
+            {t("readOn", { source: article.source })}
             <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none" aria-hidden>
               <path d="M2.5 9.5 9.5 2.5M5.5 2.5h4v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>

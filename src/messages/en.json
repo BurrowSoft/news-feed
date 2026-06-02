@@ -1,0 +1,25 @@
+{
+  "nav": { "home": "InsightMole", "feed": "News Feed" },
+  "hero": {
+    "title": "Stay Informed. No Noise.",
+    "subtitle": "Top stories from trusted sources worldwide."
+  },
+  "categories": {
+    "top": "Top Stories",
+    "business": "Business",
+    "technology": "Technology",
+    "sports": "Sports",
+    "entertainment": "Entertainment",
+    "health": "Health",
+    "science": "Science"
+  },
+  "article": {
+    "readOn": "Read on {source}",
+    "loading": "Loading news from {provider}…",
+    "unavailable": "{provider} unavailable",
+    "noneFound": "No articles found.",
+    "aiSummary": "AI Briefing",
+    "poweredBy": "Powered by gpt-4o-mini"
+  },
+  "footer": { "tagline": "Digging deep. Building solutions." }
+}
