@@ -42,7 +42,7 @@ async function fetchNews(
 
   const providerResults: ProviderResult[] = providers.map((p, i) => {
     const r = results[i];
-    if (r.status === "fulfilled") {
+    if (r?.status === "fulfilled") {
       return { name: p.name, count: r.value.length, error: false };
     }
     return { name: p.name, count: 0, error: true };
