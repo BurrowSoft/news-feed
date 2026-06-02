@@ -36,5 +36,19 @@ The Guardian has a free public API: `https://open-platform.theguardian.com/`
 - Implement `GuardianNewsProvider` and register in `createNewsRouter()`
 - Provides article thumbnails, section tags, full body text
 
-### 6. Sync shared to all apps after any provider changes
+### 6. Loading overlay — show while APIs are fetching
+The feed page must show a loading overlay while provider calls are in flight. Requirements:
+- Each active provider fetches concurrently; the overlay displays one animated line per provider, e.g. "Loading news from NewsAPI…" / "Loading news from GNews…" / "Loading news from The Guardian…"
+- As each provider resolves, its line gets a checkmark and articles stream in
+- If a provider fails, its line shows "[Provider] unavailable" in muted text
+- Implement as a client component (`<NewsLoadingOverlay providers={string[]} />`)
+- Overlay fades out once all providers have settled
+
+### 7. Source badges and "Read on [Source]" buttons
+Every article card must clearly show its origin and link back to it. Requirements:
+- Source logo or name badge on each card (NewsAPI and GNews both return `source.name`)
+- "Read on [Source name]" button that opens the original article URL in a new tab (`target="_blank" rel="noopener noreferrer"`)
+- Do not attempt to embed or proxy the full article — just link out
+
+### 8. Sync shared to all apps after any provider changes
 After editing any file in `packages/shared/src/`, copy the entire `packages/shared/` folder to the same path in: flight-booking, hotel-booking, rent-a-car, main-website, games, shopping.
