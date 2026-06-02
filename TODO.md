@@ -61,5 +61,21 @@ Every article card must clearly show its origin and link back to it. Requirement
 - "Read on [Source name]" button that opens the original article URL in a new tab (`target="_blank" rel="noopener noreferrer"`)
 - Do not attempt to embed or proxy the full article — just link out
 
-### 7. Sync shared to all apps after any provider changes
+### 7. Themed mascot — InsightMole
+Create `public/mascot.svg` — the base BurrowSoft Mole with an opened newspaper folded and held up, partially covering the lower half of the mole's face (just the glasses and top of head visible above the paper). Same black line-art style. SVG groups: `<g id="mole-base">` and `<g id="prop">`. ViewBox: `0 0 200 200`.
+
+### 8. App thumbnail / OG image
+- `public/og-image.png` — 1200×630px, InsightMole mascot centred on brand background, "InsightMole" wordmark below
+- `public/favicon.ico` — mole head only, 32×32 and 16×16
+- `public/apple-touch-icon.png` — 180×180px
+- Wire all into `src/app/layout.tsx` metadata
+
+### 9. Footer — BurrowSoft branding
+Add to the existing footer:
+- Small BurrowSoft logo (mole + wordmark) linking to burrowsoft.com
+- Links to sibling products: FlyMole, BookingMole, RentACarMole, GamesMole, ShoppingMole
+- Copyright: "© 2025 BurrowSoft. All rights reserved."
+Logo assets: copy `burrowsoft-logo.svg` from the main-website repo into `public/`.
+
+### 10. Sync shared to all apps after any provider changes
 After editing any file in `packages/shared/src/`, copy the entire `packages/shared/` folder to the same path in: flight-booking, hotel-booking, rent-a-car, main-website, games, shopping.
