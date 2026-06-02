@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
-import { createNewsRouter } from "@burrowsoft/shared";
-import type { NewsCategory, NewsArticle } from "@burrowsoft/shared";
+import { createNewsRouter, summarize } from "@burrowsoft/shared";
+import type { NewsCategory, NewsArticle, AISummary } from "@burrowsoft/shared";
 
 export interface ProviderResult {
   name: string;
@@ -12,6 +12,7 @@ export interface ProviderResult {
 export interface NewsApiResponse {
   articles: NewsArticle[];
   providers: ProviderResult[];
+  summary: AISummary | null;
 }
 
 const VALID_CATEGORIES = new Set<NewsCategory>([
@@ -51,7 +52,9 @@ async function fetchNews(
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === "fulfilled")
     .flatMap((r) => r.value);
 
-  return { articles, providers: providerResults };
+  const summary = await summarize("news", articles, country);
+
+  return { articles, providers: providerResults, summary };
 }
 
 export async function GET(req: NextRequest) {
@@ -76,7 +79,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(data);
   } catch {
     return NextResponse.json(
-      { articles: [], providers: [], error: "Failed to fetch news" },
+      { articles: [], providers: [], summary: null, error: "Failed to fetch news" },
       { status: 500 }
     );
   }

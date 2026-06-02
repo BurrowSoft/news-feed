@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { NewsCard } from "./NewsCard";
 import { NewsLoadingOverlay } from "./NewsLoadingOverlay";
-import type { NewsArticle, NewsCategory } from "@burrowsoft/shared";
+import { AISummaryCard } from "./AISummaryCard";
+import type { NewsArticle, NewsCategory, AISummary } from "@burrowsoft/shared";
 import type { ProviderResult } from "@/app/api/news/route";
 
 const CATEGORIES: { value: NewsCategory; label: string }[] = [
@@ -25,6 +26,7 @@ interface Props {
 export function NewsFeed({ country }: Props) {
   const [category, setCategory] = useState<NewsCategory>("general");
   const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [summary, setSummary] = useState<AISummary | null>(null);
   const [providerResults, setProviderResults] = useState<ProviderResult[] | null>(null);
   const [overlayVisible, setOverlayVisible] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -33,14 +35,17 @@ export function NewsFeed({ country }: Props) {
     async (cat: NewsCategory) => {
       setOverlayVisible(true);
       setProviderResults(null);
+      setSummary(null);
       setLoading(true);
 
       try {
         const res = await fetch(`/api/news?category=${cat}&country=${country}`);
         if (!res.ok) throw new Error("fetch failed");
-        const data: { articles: NewsArticle[]; providers: ProviderResult[] } = await res.json();
+        const data: { articles: NewsArticle[]; providers: ProviderResult[]; summary: AISummary | null } =
+          await res.json();
         setArticles(data.articles);
         setProviderResults(data.providers);
+        setSummary(data.summary ?? null);
 
         setTimeout(() => {
           setOverlayVisible(false);
@@ -91,6 +96,8 @@ export function NewsFeed({ country }: Props) {
           </button>
         ))}
       </div>
+
+      <AISummaryCard summary={summary} loading={loading} />
 
       {!loading && articles.length === 0 ? (
         <div className="flex min-h-64 items-center justify-center rounded-xl border border-dashed border-slate-300 text-slate-400">
