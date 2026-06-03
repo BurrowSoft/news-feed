@@ -70,6 +70,26 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   other: { "google-adsense-account": "ca-pub-1009857008755875" },
+  alternates: {
+    languages: {
+      "en": "https://www.insightmole.com",
+      "th": "https://www.insightmole.com",
+      "es": "https://www.insightmole.com",
+      "ru": "https://www.insightmole.com",
+      "pt-BR": "https://www.insightmole.com",
+      "fr": "https://www.insightmole.com",
+      "ja": "https://www.insightmole.com",
+      "zh": "https://www.insightmole.com",
+      "zh-TW": "https://www.insightmole.com",
+      "ar": "https://www.insightmole.com",
+      "de": "https://www.insightmole.com",
+      "id": "https://www.insightmole.com",
+      "ko": "https://www.insightmole.com",
+      "it": "https://www.insightmole.com",
+      "vi": "https://www.insightmole.com",
+      "x-default": "https://www.insightmole.com",
+    },
+  },
   robots: {
     index: true,
     follow: true,
@@ -87,6 +107,19 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: "#4f46e5",
+};
+
+const WEBSITE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "InsightMole",
+  "url": "https://www.insightmole.com",
+  "description": "Trending news and top headlines updated around the clock.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "BurrowSoft",
+    "url": "https://www.burrowsoft.com",
+  },
 };
 
 const SIBLING_PRODUCTS = [
@@ -119,6 +152,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           />
         )}
       </head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_SCHEMA) }}
+      />
       <body
         className="min-h-screen bg-slate-50 text-slate-900 antialiased"
         style={bodyStyle}
