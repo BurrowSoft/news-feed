@@ -16,6 +16,10 @@ export async function summarize(
   country: string
 ): Promise<AISummary | null> {
   const client = getClient();
+  if (!process.env.OPENAI_API_KEY) {
+    console.error("[AI] OPENAI_API_KEY not set");
+    return null;
+  }
   if (!client || results.length === 0) return null;
 
   try {
@@ -37,7 +41,8 @@ export async function summarize(
 
     const parsed = JSON.parse(raw) as AISummary;
     return parsed;
-  } catch {
+  } catch (err) {
+    console.error("[AI] summarize error:", err instanceof Error ? err.message : String(err));
     return null;
   }
 }
