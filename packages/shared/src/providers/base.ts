@@ -17,10 +17,6 @@ export class ProviderRouter<TParams, TResult> {
     return global.length > 0 ? global : this.providers.slice(0, 1);
   }
 
-  getProviders(): Provider<TParams, TResult>[] {
-    return this.providers;
-  }
-
   async search(params: TParams, country: string): Promise<TResult[]> {
     const providers = this.getProvidersForCountry(country);
     const results = await Promise.allSettled(providers.map((p) => p.search(params)));
