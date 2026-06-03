@@ -29,6 +29,11 @@ export function createNewsRouter(
 
   if (isTH) {
     providers.push(new BangkokPostRSSProvider());
+    console.log("[NewsRouter] TH: NEWSDATA_API_KEY:", process.env.NEWSDATA_API_KEY ? "SET" : "MISSING");
+    console.log("[NewsRouter] TH: MEDIASTACK_API_KEY:", process.env.MEDIASTACK_API_KEY ? "SET" : "MISSING");
+    console.log("[NewsRouter] TH: GNEWS_API_KEY:", process.env.GNEWS_API_KEY ? "SET" : "MISSING");
+    console.log("[NewsRouter] TH: NEWS_API_KEY:", process.env.NEWS_API_KEY ? "SET" : "MISSING");
+
     if (process.env.NEWSDATA_API_KEY)
       providers.push(new NewsDataProvider(process.env.NEWSDATA_API_KEY, "TH", "th"));
     if (process.env.MEDIASTACK_API_KEY)
@@ -37,6 +42,8 @@ export function createNewsRouter(
       providers.push(new GNewsProvider(process.env.GNEWS_API_KEY));
     if (process.env.NEWS_API_KEY)
       providers.push(new NewsAPIProvider(process.env.NEWS_API_KEY));
+
+    console.log("[NewsRouter] TH: Created", providers.length, "providers");
     return new ProviderRouter(providers);
   }
 
