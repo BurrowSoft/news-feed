@@ -3,13 +3,13 @@ import type { NewsSearchParams, NewsArticle, NewsCategory } from "../../types";
 import { fetchRSSFeed } from "./rss";
 
 const FEED_BY_CATEGORY: Record<NewsCategory, string> = {
-  general:       "https://g1.globo.com/rss/g1/index.xml",
-  business:      "https://g1.globo.com/rss/g1/economia/index.xml",
-  technology:    "https://g1.globo.com/rss/g1/tecnologia/index.xml",
-  sports:        "https://g1.globo.com/rss/g1/esportes/index.xml",
-  entertainment: "https://g1.globo.com/rss/g1/index.xml",
-  health:        "https://g1.globo.com/rss/g1/bemestar/index.xml",
-  science:       "https://g1.globo.com/rss/g1/ciencia-e-saude/index.xml",
+  general:       "https://g1.globo.com/dynamo/rss2.xml",
+  business:      "https://g1.globo.com/dynamo/economia/rss2.xml",
+  technology:    "https://g1.globo.com/dynamo/tecnologia/rss2.xml",
+  sports:        "https://g1.globo.com/dynamo/esportes/rss2.xml",
+  entertainment: "https://g1.globo.com/dynamo/rss2.xml",
+  health:        "https://g1.globo.com/dynamo/rss2.xml",
+  science:       "https://g1.globo.com/dynamo/rss2.xml",
 };
 
 export class G1RSSProvider implements NewsProvider {
