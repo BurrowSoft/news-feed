@@ -1,4 +1,5 @@
 import { getRequestConfig } from "next-intl/server";
+import { cookies, headers } from "next/headers";
 
 export const LOCALES = [
   "en", "th", "es", "ru", "pt-BR", "fr",
@@ -6,6 +7,24 @@ export const LOCALES = [
 ] as const;
 
 export type Locale = (typeof LOCALES)[number];
+
+const COUNTRY_LOCALE: Record<string, Locale> = {
+  TH: "th",
+  ES: "es", MX: "es", AR: "es", CO: "es", CL: "es", PE: "es", VE: "es",
+  BR: "pt-BR", PT: "pt-BR",
+  FR: "fr", BE: "fr", CH: "fr", CA: "fr",
+  JP: "ja",
+  CN: "zh",
+  TW: "zh-TW", HK: "zh-TW", MO: "zh-TW",
+  SA: "ar", AE: "ar", EG: "ar", KW: "ar", QA: "ar",
+  BH: "ar", OM: "ar", JO: "ar", LB: "ar", MA: "ar",
+  DE: "de", AT: "de",
+  ID: "id",
+  KR: "ko",
+  IT: "it",
+  VN: "vi",
+  RU: "ru", UA: "ru", KZ: "ru", BY: "ru",
+};
 
 function isValidLocale(v: string | undefined): v is Locale {
   return LOCALES.includes(v as Locale);
@@ -31,9 +50,16 @@ async function loadMessages(locale: Locale) {
   }
 }
 
-export default getRequestConfig(async ({ requestLocale }) => {
-  const requested = await requestLocale;
-  const locale: Locale = isValidLocale(requested) ? requested : "en";
+export default getRequestConfig(async () => {
+  const cookieStore = await cookies();
+  const hdrs = await headers();
+
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const country = hdrs.get("x-vercel-ip-country") ?? hdrs.get("cf-ipcountry") ?? "US";
+
+  const locale: Locale = isValidLocale(cookieLocale)
+    ? cookieLocale
+    : (COUNTRY_LOCALE[country] ?? "en");
 
   return {
     locale,
