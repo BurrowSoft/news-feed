@@ -43,7 +43,7 @@ export function createNewsRouter(
   if (isBR) {
     providers.push(new G1RSSProvider());
     if (process.env.NEWSDATA_API_KEY)
-      providers.push(new NewsDataProvider(process.env.NEWSDATA_API_KEY, "BR", "pt"));
+      providers.push(new NewsDataProvider(process.env.NEWSDATA_API_KEY, "BR", "en"));
     if (process.env.MEDIASTACK_API_KEY)
       providers.push(new MediaStackProvider(process.env.MEDIASTACK_API_KEY, "br", "pt"));
     if (process.env.GNEWS_API_KEY)
