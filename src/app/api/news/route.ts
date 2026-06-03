@@ -74,14 +74,17 @@ export async function GET(req: NextRequest) {
   const validLocale = SUPPORTED_LOCALES.has(locale) ? locale : "en";
   const cacheKey = `news:${category}:${country}:${validLocale}`;
 
-  const getCached = unstable_cache(
-    () => fetchNews(category, country, validLocale),
-    [cacheKey],
-    { revalidate: 900 }
-  );
+  // ?nocache=1 bypasses unstable_cache — shows live provider results for debugging
+  const skipCache = searchParams.get("nocache") === "1";
 
   try {
-    const data = await getCached();
+    const data = skipCache
+      ? await fetchNews(category, country, validLocale)
+      : await unstable_cache(
+          () => fetchNews(category, country, validLocale),
+          [cacheKey],
+          { revalidate: 900 }
+        )();
     return NextResponse.json(data);
   } catch {
     return NextResponse.json(
