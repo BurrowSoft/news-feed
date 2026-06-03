@@ -19,6 +19,6 @@ export class BangkokPostRSSProvider implements NewsProvider {
   async search(params: NewsSearchParams): Promise<NewsArticle[]> {
     const category = params.category ?? "general";
     const feedUrl = FEED_BY_CATEGORY[category];
-    return fetchRSSFeed({ url: feedUrl, sourceName: "Bangkok Post", language: "en", category });
+    return fetchRSSFeed({ url: feedUrl, sourceName: "Bangkok Post", language: "en", category, enrichImages: true });
   }
 }
