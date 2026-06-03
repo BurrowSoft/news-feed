@@ -33,11 +33,13 @@ const LOCALE_TO_LANGUAGE: Record<string, string> = {
 async function fetchNews(
   category: NewsCategory,
   country: string,
-  locale: string
-): Promise<NewsApiResponse> {
+  locale: string,
+  debug = false
+): Promise<NewsApiResponse & { _debug?: Record<string, unknown> }> {
   const language = LOCALE_TO_LANGUAGE[locale] ?? "en";
   const router = createNewsRouter(country, language);
   const providers = router.getProviders();
+  if (debug) console.log("[debug] providers:", providers.map(p => p.name), "OPENAI_KEY:", process.env.OPENAI_API_KEY ? "SET("+process.env.OPENAI_API_KEY.slice(0,8)+"...)" : "MISSING");
 
   const pageSize = 30;
   const params = { pageSize, country, language, category };
@@ -79,7 +81,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const data = skipCache
-      ? await fetchNews(category, country, validLocale)
+      ? await fetchNews(category, country, validLocale, true)
       : await unstable_cache(
           () => fetchNews(category, country, validLocale),
           [cacheKey],
