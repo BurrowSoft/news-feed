@@ -33,13 +33,11 @@ const LOCALE_TO_LANGUAGE: Record<string, string> = {
 async function fetchNews(
   category: NewsCategory,
   country: string,
-  locale: string,
-  debug = false
-): Promise<NewsApiResponse & { _debug?: Record<string, unknown> }> {
+  locale: string
+): Promise<NewsApiResponse> {
   const language = LOCALE_TO_LANGUAGE[locale] ?? "en";
   const router = createNewsRouter(country, language);
   const providers = router.getProviders();
-  if (debug) console.log("[debug] providers:", providers.map(p => p.name), "OPENAI_KEY:", process.env.OPENAI_API_KEY ? "SET("+process.env.OPENAI_API_KEY.slice(0,8)+"...)" : "MISSING");
 
   const pageSize = 30;
   const params = { pageSize, country, language, category };
@@ -58,15 +56,9 @@ async function fetchNews(
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === "fulfilled")
     .flatMap((r) => r.value);
 
-  let summary = null;
-  let summaryError: string | null = null;
-  try {
-    summary = await summarize("news", articles, country);
-  } catch (err) {
-    summaryError = err instanceof Error ? err.message : String(err);
-  }
+  const summary = await summarize("news", articles, country);
 
-  return { articles, providers: providerResults, summary, _summaryError: summaryError } as any;
+  return { articles, providers: providerResults, summary };
 }
 
 export async function GET(req: NextRequest) {
@@ -87,24 +79,12 @@ export async function GET(req: NextRequest) {
 
   try {
     const data = skipCache
-      ? await fetchNews(category, country, validLocale, true)
+      ? await fetchNews(category, country, validLocale)
       : await unstable_cache(
           () => fetchNews(category, country, validLocale),
           [cacheKey],
           { revalidate: 900 }
         )();
-
-    if (skipCache) {
-      return NextResponse.json({
-        ...data,
-        _debug: {
-          openai_key_set: !!process.env.OPENAI_API_KEY,
-          openai_key_prefix: process.env.OPENAI_API_KEY?.slice(0, 12) ?? "MISSING",
-          country,
-          locale: validLocale,
-        },
-      });
-    }
 
     return NextResponse.json(data);
   } catch {
