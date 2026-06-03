@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "Noticias" },
+  "hero": {
+    "title": "Mantente informado. Sin ruido.",
+    "subtitle": "Las mejores noticias de fuentes confiables de todo el mundo."
+  },
+  "categories": {
+    "top": "Principales",
+    "business": "Negocios",
+    "technology": "Tecnología",
+    "sports": "Deportes",
+    "entertainment": "Entretenimiento",
+    "health": "Salud",
+    "science": "Ciencia"
+  },
+  "article": {
+    "readOn": "Leer en {source}",
+    "readFull": "Leer artículo completo en {source}",
+    "backTo": "Volver a {siteName}",
+    "via": "vía {provider}",
+    "loading": "Cargando noticias de {provider}…",
+    "unavailable": "{provider} no disponible",
+    "noneFound": "No se encontraron artículos.",
+    "aiSummary": "Resumen de IA",
+    "poweredBy": "Impulsado por gpt-4o-mini"
+  },
+  "footer": { "tagline": "Buscando a fondo. Construyendo soluciones." }
+}

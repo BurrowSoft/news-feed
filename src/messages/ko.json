@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "뉴스 피드" },
+  "hero": {
+    "title": "정보를 놓치지 마세요. 소음 없이.",
+    "subtitle": "전 세계 신뢰할 수 있는 출처의 주요 뉴스."
+  },
+  "categories": {
+    "top": "주요 뉴스",
+    "business": "비즈니스",
+    "technology": "테크놀로지",
+    "sports": "스포츠",
+    "entertainment": "엔터테인먼트",
+    "health": "건강",
+    "science": "과학"
+  },
+  "article": {
+    "readOn": "{source}에서 읽기",
+    "readFull": "{source}에서 전체 기사 읽기",
+    "backTo": "{siteName}으로 돌아가기",
+    "via": "{provider} 경유",
+    "loading": "{provider}에서 뉴스 불러오는 중…",
+    "unavailable": "{provider} 이용 불가",
+    "noneFound": "기사를 찾을 수 없습니다.",
+    "aiSummary": "AI 브리핑",
+    "poweredBy": "gpt-4o-mini 기반"
+  },
+  "footer": { "tagline": "깊이 파고들다. 해결책을 만들다." }
+}

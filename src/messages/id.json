@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "Berita" },
+  "hero": {
+    "title": "Tetap Terinformasi. Tanpa Gangguan.",
+    "subtitle": "Berita utama dari sumber terpercaya di seluruh dunia."
+  },
+  "categories": {
+    "top": "Berita Utama",
+    "business": "Bisnis",
+    "technology": "Teknologi",
+    "sports": "Olahraga",
+    "entertainment": "Hiburan",
+    "health": "Kesehatan",
+    "science": "Sains"
+  },
+  "article": {
+    "readOn": "Baca di {source}",
+    "readFull": "Baca artikel lengkap di {source}",
+    "backTo": "Kembali ke {siteName}",
+    "via": "via {provider}",
+    "loading": "Memuat berita dari {provider}…",
+    "unavailable": "{provider} tidak tersedia",
+    "noneFound": "Tidak ada artikel ditemukan.",
+    "aiSummary": "Ringkasan AI",
+    "poweredBy": "Didukung oleh gpt-4o-mini"
+  },
+  "footer": { "tagline": "Menggali lebih dalam. Membangun solusi." }
+}

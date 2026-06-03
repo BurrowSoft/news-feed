@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "新聞動態" },
+  "hero": {
+    "title": "掌握資訊。無干擾。",
+    "subtitle": "來自全球可信來源的頭條新聞。"
+  },
+  "categories": {
+    "top": "頭條新聞",
+    "business": "商業",
+    "technology": "科技",
+    "sports": "體育",
+    "entertainment": "娛樂",
+    "health": "健康",
+    "science": "科學"
+  },
+  "article": {
+    "readOn": "在{source}閱讀",
+    "readFull": "在{source}閱讀全文",
+    "backTo": "返回{siteName}",
+    "via": "來自{provider}",
+    "loading": "正在從{provider}載入新聞…",
+    "unavailable": "{provider}暫不可用",
+    "noneFound": "未找到文章。",
+    "aiSummary": "AI簡報",
+    "poweredBy": "由gpt-4o-mini提供支援"
+  },
+  "footer": { "tagline": "深入挖掘，構建解決方案。" }
+}

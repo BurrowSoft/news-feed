@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "新闻动态" },
+  "hero": {
+    "title": "保持知情。无干扰。",
+    "subtitle": "来自全球可信来源的头条新闻。"
+  },
+  "categories": {
+    "top": "头条新闻",
+    "business": "商业",
+    "technology": "科技",
+    "sports": "体育",
+    "entertainment": "娱乐",
+    "health": "健康",
+    "science": "科学"
+  },
+  "article": {
+    "readOn": "在{source}阅读",
+    "readFull": "在{source}阅读全文",
+    "backTo": "返回{siteName}",
+    "via": "来自{provider}",
+    "loading": "正在从{provider}加载新闻…",
+    "unavailable": "{provider}暂不可用",
+    "noneFound": "未找到文章。",
+    "aiSummary": "AI简报",
+    "poweredBy": "由gpt-4o-mini提供支持"
+  },
+  "footer": { "tagline": "深入挖掘，构建解决方案。" }
+}

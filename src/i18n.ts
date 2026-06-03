@@ -1,7 +1,11 @@
 import { getRequestConfig } from "next-intl/server";
 
-const LOCALES = ["en", "th"] as const;
-type Locale = (typeof LOCALES)[number];
+export const LOCALES = [
+  "en", "th", "es", "ru", "pt-BR", "fr",
+  "ja", "zh", "zh-TW", "ar", "de", "id", "ko", "it", "vi",
+] as const;
+
+export type Locale = (typeof LOCALES)[number];
 
 function isValidLocale(v: string | undefined): v is Locale {
   return LOCALES.includes(v as Locale);

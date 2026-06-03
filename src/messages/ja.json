@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "ニュースフィード" },
+  "hero": {
+    "title": "情報をキャッチ。ノイズなし。",
+    "subtitle": "世界中の信頼できるソースからのトップニュース。"
+  },
+  "categories": {
+    "top": "トップニュース",
+    "business": "ビジネス",
+    "technology": "テクノロジー",
+    "sports": "スポーツ",
+    "entertainment": "エンタメ",
+    "health": "健康",
+    "science": "科学"
+  },
+  "article": {
+    "readOn": "{source}で読む",
+    "readFull": "{source}で全文を読む",
+    "backTo": "{siteName}に戻る",
+    "via": "{provider}経由",
+    "loading": "{provider}からニュースを読み込み中…",
+    "unavailable": "{provider}は利用できません",
+    "noneFound": "記事が見つかりません。",
+    "aiSummary": "AIブリーフィング",
+    "poweredBy": "gpt-4o-mini使用"
+  },
+  "footer": { "tagline": "深く掘り下げる。解決策を構築する。" }
+}

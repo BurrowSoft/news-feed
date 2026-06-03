@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "Newsfeed" },
+  "hero": {
+    "title": "Bleib informiert. Kein Lärm.",
+    "subtitle": "Top-Nachrichten aus vertrauenswürdigen Quellen weltweit."
+  },
+  "categories": {
+    "top": "Top-Nachrichten",
+    "business": "Wirtschaft",
+    "technology": "Technologie",
+    "sports": "Sport",
+    "entertainment": "Unterhaltung",
+    "health": "Gesundheit",
+    "science": "Wissenschaft"
+  },
+  "article": {
+    "readOn": "Lesen bei {source}",
+    "readFull": "Vollständigen Artikel lesen bei {source}",
+    "backTo": "Zurück zu {siteName}",
+    "via": "über {provider}",
+    "loading": "Nachrichten von {provider} werden geladen…",
+    "unavailable": "{provider} nicht verfügbar",
+    "noneFound": "Keine Artikel gefunden.",
+    "aiSummary": "KI-Briefing",
+    "poweredBy": "Powered by gpt-4o-mini"
+  },
+  "footer": { "tagline": "Tief graben. Lösungen bauen." }
+}

@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "Лента новостей" },
+  "hero": {
+    "title": "Будь в курсе. Без лишнего шума.",
+    "subtitle": "Главные новости из надёжных источников со всего мира."
+  },
+  "categories": {
+    "top": "Главные новости",
+    "business": "Бизнес",
+    "technology": "Технологии",
+    "sports": "Спорт",
+    "entertainment": "Развлечения",
+    "health": "Здоровье",
+    "science": "Наука"
+  },
+  "article": {
+    "readOn": "Читать на {source}",
+    "readFull": "Читать полную статью на {source}",
+    "backTo": "Назад в {siteName}",
+    "via": "через {provider}",
+    "loading": "Загрузка новостей от {provider}…",
+    "unavailable": "{provider} недоступен",
+    "noneFound": "Статьи не найдены.",
+    "aiSummary": "ИИ-дайджест",
+    "poweredBy": "Работает на gpt-4o-mini"
+  },
+  "footer": { "tagline": "Копаем глубже. Строим решения." }
+}

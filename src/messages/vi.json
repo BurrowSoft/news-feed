@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "Tin tức" },
+  "hero": {
+    "title": "Cập nhật thông tin. Không ồn ào.",
+    "subtitle": "Tin tức hàng đầu từ các nguồn đáng tin cậy trên toàn thế giới."
+  },
+  "categories": {
+    "top": "Tin nổi bật",
+    "business": "Kinh doanh",
+    "technology": "Công nghệ",
+    "sports": "Thể thao",
+    "entertainment": "Giải trí",
+    "health": "Sức khỏe",
+    "science": "Khoa học"
+  },
+  "article": {
+    "readOn": "Đọc trên {source}",
+    "readFull": "Đọc toàn bài trên {source}",
+    "backTo": "Quay lại {siteName}",
+    "via": "qua {provider}",
+    "loading": "Đang tải tin từ {provider}…",
+    "unavailable": "{provider} không khả dụng",
+    "noneFound": "Không tìm thấy bài viết.",
+    "aiSummary": "Tóm tắt AI",
+    "poweredBy": "Được hỗ trợ bởi gpt-4o-mini"
+  },
+  "footer": { "tagline": "Đào sâu. Xây dựng giải pháp." }
+}

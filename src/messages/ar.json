@@ -1,0 +1,28 @@
+{
+  "nav": { "home": "InsightMole", "feed": "تغذية الأخبار" },
+  "hero": {
+    "title": "ابقَ على اطلاع. بلا ضوضاء.",
+    "subtitle": "أبرز الأخبار من مصادر موثوقة حول العالم."
+  },
+  "categories": {
+    "top": "أبرز الأخبار",
+    "business": "أعمال",
+    "technology": "تكنولوجيا",
+    "sports": "رياضة",
+    "entertainment": "ترفيه",
+    "health": "صحة",
+    "science": "علوم"
+  },
+  "article": {
+    "readOn": "اقرأ على {source}",
+    "readFull": "اقرأ المقال كاملاً على {source}",
+    "backTo": "العودة إلى {siteName}",
+    "via": "عبر {provider}",
+    "loading": "جارٍ تحميل الأخبار من {provider}…",
+    "unavailable": "{provider} غير متاح",
+    "noneFound": "لم يتم العثور على مقالات.",
+    "aiSummary": "موجز الذكاء الاصطناعي",
+    "poweredBy": "مدعوم بـ gpt-4o-mini"
+  },
+  "footer": { "tagline": "نحفر بعمق. نبني الحلول." }
+}
