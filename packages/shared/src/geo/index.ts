@@ -32,7 +32,8 @@ export function detectCountry(
 ): string {
   const get = (key: string): string | null | undefined =>
     headers instanceof Headers ? headers.get(key) : headers[key];
-  return get("x-vercel-ip-country") ?? get("cf-ipcountry") ?? "US";
+  // x-burrowsoft-geo is a dev/middleware override (Vercel re-injects x-vercel-ip-country at edge)
+  return get("x-burrowsoft-geo") ?? get("x-vercel-ip-country") ?? get("cf-ipcountry") ?? "US";
 }
 
 export function getRegion(countryCode: string): Region {

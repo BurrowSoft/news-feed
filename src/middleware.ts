@@ -48,7 +48,8 @@ export function middleware(req: NextRequest) {
     if (devLocale && (VALID_LOCALES as readonly string[]).includes(devLocale)) {
       const devCountry = LOCALE_TO_COUNTRY[devLocale] ?? "US";
       const reqHeaders = patchCookieLocale(req, devLocale);
-      reqHeaders.set("x-vercel-ip-country", devCountry);
+      // Custom header — Vercel re-injects x-vercel-ip-country at the edge, so use our own
+      reqHeaders.set("x-burrowsoft-geo", devCountry);
 
       const res = NextResponse.next({ request: { headers: reqHeaders } });
       res.cookies.set("NEXT_LOCALE", devLocale, {
