@@ -1,4 +1,14 @@
-import { type NextRequest, NextResponse } from "next/server";
+﻿import { type NextRequest, NextResponse } from "next/server";
+
+const VALID_LOCALES = ["en","th","es","ru","pt-BR","fr","ja","zh","zh-TW","ar","de","id","ko","it","vi"] as const;
+type Locale = (typeof VALID_LOCALES)[number];
+
+// Maps locale code → ISO country code for detectCountry() spoofing
+const LOCALE_TO_COUNTRY: Record<string, string> = {
+  th: "TH", es: "ES", ru: "RU", "pt-BR": "BR", fr: "FR",
+  ja: "JP", zh: "CN", "zh-TW": "TW", ar: "SA", de: "DE",
+  id: "ID", ko: "KR", it: "IT", vi: "VN", en: "US",
+};
 
 const COUNTRY_LOCALE: Record<string, string> = {
   TH: "th",
@@ -22,8 +32,30 @@ const COUNTRY_LOCALE: Record<string, string> = {
 };
 
 export function middleware(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+
+  // Dev mode: ?dev=1&country=th overrides locale + spoofs country header
+  if (searchParams.get("dev") === "1") {
+    const devLocale = searchParams.get("country") as string;
+    if (devLocale && (VALID_LOCALES as readonly string[]).includes(devLocale)) {
+      const devCountry = LOCALE_TO_COUNTRY[devLocale] ?? "US";
+      const reqHeaders = new Headers(req.headers);
+      reqHeaders.set("x-vercel-ip-country", devCountry);
+
+      const res = NextResponse.next({ request: { headers: reqHeaders } });
+      res.cookies.set("NEXT_LOCALE", devLocale, {
+        maxAge: 60 * 60 * 24 * 365,
+        path: "/",
+        sameSite: "lax",
+      });
+      return res;
+    }
+  }
+
+  // Normal flow: cookie already set — pass through
   if (req.cookies.has("NEXT_LOCALE")) return NextResponse.next();
 
+  // First visit: detect country and seed cookie
   const country =
     req.headers.get("x-vercel-ip-country") ??
     req.headers.get("cf-ipcountry") ??
