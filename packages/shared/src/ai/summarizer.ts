@@ -42,7 +42,8 @@ export async function summarize(
     const parsed = JSON.parse(raw) as AISummary;
     return parsed;
   } catch (err) {
-    console.error("[AI] summarize error:", err instanceof Error ? err.message : String(err));
-    return null;
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[AI] summarize error:", msg);
+    throw new Error("[AI] " + msg); // re-throw so caller can surface it
   }
 }

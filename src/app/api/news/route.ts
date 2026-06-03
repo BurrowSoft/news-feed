@@ -58,9 +58,15 @@ async function fetchNews(
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === "fulfilled")
     .flatMap((r) => r.value);
 
-  const summary = await summarize("news", articles, country);
+  let summary = null;
+  let summaryError: string | null = null;
+  try {
+    summary = await summarize("news", articles, country);
+  } catch (err) {
+    summaryError = err instanceof Error ? err.message : String(err);
+  }
 
-  return { articles, providers: providerResults, summary };
+  return { articles, providers: providerResults, summary, _summaryError: summaryError } as any;
 }
 
 export async function GET(req: NextRequest) {
