@@ -43,7 +43,7 @@ export class NewsAPIProvider implements NewsProvider {
     if (params.category) url.searchParams.set("category", NEWSAPI_CATEGORY[params.category]);
     url.searchParams.set("apiKey", this.apiKey);
 
-    const res = await fetch(url.toString(), { cache: "no-store" });
+    const res = await fetch(url.toString(), { next: { revalidate: 900 } });
     if (!res.ok) return [];
 
     const data: NewsApiResponse = await res.json();

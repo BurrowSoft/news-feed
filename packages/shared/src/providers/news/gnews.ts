@@ -32,11 +32,6 @@ export class GNewsProvider implements NewsProvider {
   constructor(private readonly apiKey: string) {}
 
   async search(params: NewsSearchParams): Promise<NewsArticle[]> {
-    if (!this.apiKey) {
-      console.error("[GNews] API key is missing");
-      return [];
-    }
-
     const max = params.pageSize ?? 10;
     const lang = params.language ?? "en";
     const country = params.country?.toLowerCase() ?? "us";
@@ -50,19 +45,10 @@ export class GNewsProvider implements NewsProvider {
     const topic = params.category ? GNEWS_TOPIC[params.category] : null;
     if (topic) url.searchParams.set("topic", topic);
 
-    const res = await fetch(url.toString(), { cache: "no-store" });
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("[GNews] API error:", res.status, text.slice(0, 200));
-      return [];
-    }
+    const res = await fetch(url.toString(), { next: { revalidate: 900 } });
+    if (!res.ok) return [];
 
     const data: GNewsResponse = await res.json();
-    if (!data.articles) {
-      console.warn("[GNews] No articles in response");
-      return [];
-    }
-
     return data.articles.map((a) => ({
       id: a.url,
       title: a.title,

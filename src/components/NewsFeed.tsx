@@ -32,6 +32,7 @@ export function NewsFeed({ country, locale }: Props) {
   const tArticle = useTranslations("article");
 
   const [category, setCategory] = useState<NewsCategory>("general");
+  const [activeHighlight, setActiveHighlight] = useState<string | null>(null);
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [summary, setSummary] = useState<AISummary | null>(null);
   const [providerResults, setProviderResults] = useState<ProviderResult[] | null>(null);
@@ -39,22 +40,27 @@ export function NewsFeed({ country, locale }: Props) {
   const [loading, setLoading] = useState(true);
 
   const fetchNews = useCallback(
-    async (cat: NewsCategory) => {
+    async (cat: NewsCategory, query?: string) => {
       setOverlayVisible(true);
       setProviderResults(null);
-      setSummary(null);
+      // Keep existing summary visible during query searches — it's still relevant context
+      if (!query) setSummary(null);
       setLoading(true);
 
       try {
-        const res = await fetch(
-          `/api/news?category=${cat}&country=${country}&locale=${locale}`
-        );
+        const url = new URL("/api/news", window.location.origin);
+        url.searchParams.set("category", cat);
+        url.searchParams.set("country", country);
+        url.searchParams.set("locale", locale);
+        if (query) url.searchParams.set("q", query);
+
+        const res = await fetch(url.toString());
         if (!res.ok) throw new Error("fetch failed");
         const data: { articles: NewsArticle[]; providers: ProviderResult[]; summary: AISummary | null } =
           await res.json();
         setArticles(data.articles);
         setProviderResults(data.providers);
-        setSummary(data.summary ?? null);
+        if (data.summary !== null) setSummary(data.summary);
 
         setTimeout(() => {
           setOverlayVisible(false);
@@ -76,9 +82,20 @@ export function NewsFeed({ country, locale }: Props) {
   }, [fetchNews]);
 
   function handleCategoryChange(cat: NewsCategory) {
-    if (cat === category) return;
+    if (cat === category && !activeHighlight) return;
     setCategory(cat);
+    setActiveHighlight(null);
     fetchNews(cat);
+  }
+
+  function handleHighlightClick(text: string) {
+    const next = activeHighlight === text ? null : text;
+    setActiveHighlight(next);
+    if (next) {
+      fetchNews(category, next);
+    } else {
+      fetchNews(category);
+    }
   }
 
   return (
@@ -106,7 +123,28 @@ export function NewsFeed({ country, locale }: Props) {
         ))}
       </div>
 
-      <AISummaryCard summary={summary} loading={loading} />
+      <AISummaryCard
+        summary={summary}
+        loading={loading}
+        activeHighlight={activeHighlight}
+        onHighlightClick={handleHighlightClick}
+      />
+
+      {activeHighlight && (
+        <div className="mb-4 flex items-center gap-2">
+          <span className="text-xs text-slate-500">Showing results for:</span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-600 px-3 py-1 text-xs font-medium text-white">
+            {activeHighlight}
+            <button
+              onClick={() => handleHighlightClick(activeHighlight)}
+              aria-label="Clear search"
+              className="rounded-full hover:opacity-75 transition-opacity leading-none"
+            >
+              ×
+            </button>
+          </span>
+        </div>
+      )}
 
       {!loading && articles.length === 0 ? (
         <div className="flex min-h-64 items-center justify-center rounded-xl border border-dashed border-slate-300 text-slate-400">

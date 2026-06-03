@@ -52,7 +52,7 @@ export class GuardianNewsProvider implements NewsProvider {
     const section = params.category ? GUARDIAN_SECTION[params.category] : null;
     if (section) url.searchParams.set("section", section);
 
-    const res = await fetch(url.toString(), { cache: "no-store" });
+    const res = await fetch(url.toString(), { next: { revalidate: 900 } });
     if (!res.ok) return [];
 
     const data: GuardianResponse = await res.json();

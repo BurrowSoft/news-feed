@@ -6,9 +6,11 @@ import type { AISummary } from "@burrowsoft/shared";
 interface Props {
   summary: AISummary | null;
   loading: boolean;
+  activeHighlight?: string | null;
+  onHighlightClick?: (text: string) => void;
 }
 
-export function AISummaryCard({ summary, loading }: Props) {
+export function AISummaryCard({ summary, loading, activeHighlight, onHighlightClick }: Props) {
   const t = useTranslations("article");
 
   if (loading) {
@@ -45,14 +47,25 @@ export function AISummaryCard({ summary, loading }: Props) {
 
       {summary.highlights.length > 0 && (
         <ul className="mt-3 flex flex-wrap gap-2">
-          {summary.highlights.map((h, i) => (
-            <li
-              key={i}
-              className="rounded-full border border-indigo-200 bg-white px-3 py-1 text-xs text-slate-600"
-            >
-              {h}
-            </li>
-          ))}
+          {summary.highlights.map((h, i) => {
+            const isActive = activeHighlight === h;
+            return (
+              <li key={i}>
+                <button
+                  onClick={() => onHighlightClick?.(h)}
+                  className={[
+                    "rounded-full border px-3 py-1 text-xs transition-colors",
+                    onHighlightClick ? "cursor-pointer" : "cursor-default",
+                    isActive
+                      ? "border-indigo-400 bg-indigo-600 text-white"
+                      : "border-indigo-200 bg-white text-slate-600 hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-700",
+                  ].join(" ")}
+                >
+                  {h}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
 

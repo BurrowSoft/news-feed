@@ -33,14 +33,15 @@ const LOCALE_TO_LANGUAGE: Record<string, string> = {
 async function fetchNews(
   category: NewsCategory,
   country: string,
-  locale: string
+  locale: string,
+  query?: string
 ): Promise<NewsApiResponse> {
   const language = LOCALE_TO_LANGUAGE[locale] ?? "en";
   const router = createNewsRouter(country, language);
-  const providers = router.getProviders();
+  const providers = router.getProvidersForCountry(country);
 
   const pageSize = 30;
-  const params = { pageSize, country, language, category };
+  const params = { pageSize, country, language, category, ...(query ? { query } : {}) };
 
   const results = await Promise.allSettled(providers.map((p) => p.search(params)));
 
@@ -56,7 +57,8 @@ async function fetchNews(
     .filter((r): r is PromiseFulfilledResult<NewsArticle[]> => r.status === "fulfilled")
     .flatMap((r) => r.value);
 
-  const summary = await summarize("news", articles, country);
+  // Skip AI summary for query searches — the existing summary is still relevant
+  const summary = query ? null : await summarize("news", articles, country);
 
   return { articles, providers: providerResults, summary };
 }
@@ -72,14 +74,15 @@ export async function GET(req: NextRequest) {
     : "general";
 
   const validLocale = SUPPORTED_LOCALES.has(locale) ? locale : "en";
+  const query = searchParams.get("q")?.trim() || undefined;
   const cacheKey = `news:${category}:${country}:${validLocale}`;
 
-  // ?nocache=1 bypasses unstable_cache — shows live provider results for debugging
-  const skipCache = searchParams.get("nocache") === "1";
+  // Query searches and ?nocache=1 bypass the cache — results are specific/dynamic
+  const skipCache = !!query || searchParams.get("nocache") === "1";
 
   try {
     const data = skipCache
-      ? await fetchNews(category, country, validLocale)
+      ? await fetchNews(category, country, validLocale, query)
       : await unstable_cache(
           () => fetchNews(category, country, validLocale),
           [cacheKey],
