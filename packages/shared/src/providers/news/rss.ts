@@ -24,7 +24,7 @@ export interface RSSFeedConfig {
 
 export async function fetchRSSFeed(config: RSSFeedConfig): Promise<NewsArticle[]> {
   const res = await fetch(config.url, {
-    next: { revalidate: 900 },
+    cache: "no-store",
     headers: { "User-Agent": "Mozilla/5.0 (compatible; BurrowSoftBot/1.0)" },
   });
 

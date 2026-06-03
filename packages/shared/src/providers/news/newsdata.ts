@@ -49,7 +49,7 @@ export class NewsDataProvider implements NewsProvider {
     url.searchParams.set("category", category);
     url.searchParams.set("size", String(params.pageSize ?? 20));
 
-    const res = await fetch(url.toString(), { next: { revalidate: 900 } });
+    const res = await fetch(url.toString(), { cache: "no-store" });
     if (!res.ok) {
       const text = await res.text();
       console.error("[NewsData] API error:", res.status, text.slice(0, 200));

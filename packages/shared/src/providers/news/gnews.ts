@@ -50,7 +50,7 @@ export class GNewsProvider implements NewsProvider {
     const topic = params.category ? GNEWS_TOPIC[params.category] : null;
     if (topic) url.searchParams.set("topic", topic);
 
-    const res = await fetch(url.toString(), { next: { revalidate: 900 } });
+    const res = await fetch(url.toString(), { cache: "no-store" });
     if (!res.ok) {
       const text = await res.text();
       console.error("[GNews] API error:", res.status, text.slice(0, 200));
