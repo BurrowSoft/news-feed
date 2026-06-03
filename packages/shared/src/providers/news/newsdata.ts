@@ -36,6 +36,11 @@ export class NewsDataProvider implements NewsProvider {
   ) {}
 
   async search(params: NewsSearchParams): Promise<NewsArticle[]> {
+    if (!this.apiKey) {
+      console.error("[NewsData] API key is missing");
+      return [];
+    }
+
     const category = CATEGORY_MAP[params.category ?? "general"];
     const url = new URL("https://newsdata.io/api/1/news");
     url.searchParams.set("apikey", this.apiKey);
@@ -45,10 +50,17 @@ export class NewsDataProvider implements NewsProvider {
     url.searchParams.set("size", String(params.pageSize ?? 20));
 
     const res = await fetch(url.toString(), { next: { revalidate: 900 } });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("[NewsData] API error:", res.status, text.slice(0, 200));
+      return [];
+    }
 
     const data: NewsDataResponse = await res.json();
-    if (data.status !== "success" || !data.results) return [];
+    if (data.status !== "success" || !data.results) {
+      console.warn("[NewsData] No results or error status:", data.status);
+      return [];
+    }
 
     return data.results.map((a): NewsArticle => ({
       id: a.link,

@@ -35,6 +35,11 @@ export class MediaStackProvider implements NewsProvider {
   ) {}
 
   async search(params: NewsSearchParams): Promise<NewsArticle[]> {
+    if (!this.apiKey) {
+      console.error("[MediaStack] API key is missing");
+      return [];
+    }
+
     const category = CATEGORY_MAP[params.category ?? "general"];
     const url = new URL("http://api.mediastack.com/v1/news");
     url.searchParams.set("access_key", this.apiKey);
@@ -44,10 +49,17 @@ export class MediaStackProvider implements NewsProvider {
     url.searchParams.set("limit", String(params.pageSize ?? 20));
 
     const res = await fetch(url.toString(), { next: { revalidate: 900 } });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("[MediaStack] API error:", res.status, text.slice(0, 200));
+      return [];
+    }
 
     const data: MediaStackResponse = await res.json();
-    if (!data.data) return [];
+    if (!data.data) {
+      console.warn("[MediaStack] No data in response");
+      return [];
+    }
 
     return data.data.map((a): NewsArticle => ({
       id: a.url,
