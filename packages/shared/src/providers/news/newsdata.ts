@@ -47,7 +47,7 @@ export class NewsDataProvider implements NewsProvider {
     url.searchParams.set("country", this.country.toLowerCase());
     url.searchParams.set("language", this.language);
     url.searchParams.set("category", category);
-    url.searchParams.set("size", String(params.pageSize ?? 20));
+    url.searchParams.set("size", String(Math.min(params.pageSize ?? 10, 10))); // free plan max 10
 
     const res = await fetch(url.toString(), { cache: "no-store" });
     if (!res.ok) {
