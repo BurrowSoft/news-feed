@@ -18,10 +18,10 @@ import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const sarabun = Sarabun({ subsets: ["thai", "latin"], weight: ["400", "600", "700"], variable: "--font-sarabun", display: "swap" });
-const notoJP  = Noto_Sans_JP({ subsets: ["japanese"], weight: ["400", "700"], variable: "--font-noto-jp", display: "swap" });
-const notoSC  = Noto_Sans_SC({ subsets: ["chinese-simplified"], weight: ["400", "700"], variable: "--font-noto-sc", display: "swap" });
-const notoTC  = Noto_Sans_TC({ subsets: ["chinese-traditional"], weight: ["400", "700"], variable: "--font-noto-tc", display: "swap" });
-const notoKR  = Noto_Sans_KR({ subsets: ["korean"], weight: ["400", "700"], variable: "--font-noto-kr", display: "swap" });
+const notoJP  = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-noto-jp", display: "swap" });
+const notoSC  = Noto_Sans_SC({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-noto-sc", display: "swap" });
+const notoTC  = Noto_Sans_TC({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-noto-tc", display: "swap" });
+const notoKR  = Noto_Sans_KR({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-noto-kr", display: "swap" });
 const notoAR  = Noto_Sans_Arabic({ subsets: ["arabic"], weight: ["400", "700"], variable: "--font-noto-ar", display: "swap" });
 
 const ALL_FONT_VARS = [
