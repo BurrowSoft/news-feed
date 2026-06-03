@@ -87,6 +87,19 @@ export async function GET(req: NextRequest) {
           [cacheKey],
           { revalidate: 900 }
         )();
+
+    if (skipCache) {
+      return NextResponse.json({
+        ...data,
+        _debug: {
+          openai_key_set: !!process.env.OPENAI_API_KEY,
+          openai_key_prefix: process.env.OPENAI_API_KEY?.slice(0, 12) ?? "MISSING",
+          country,
+          locale: validLocale,
+        },
+      });
+    }
+
     return NextResponse.json(data);
   } catch {
     return NextResponse.json(
