@@ -1,13 +1,19 @@
 import { headers } from "next/headers";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { NewsFeed } from "@/components/NewsFeed";
 import { SITE_NAME } from "@/lib/seo";
 import { detectCountry } from "@burrowsoft/shared";
 
-export default async function HomePage() {
+interface Props {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const hdrs = await headers();
   const country = detectCountry(Object.fromEntries(hdrs.entries()));
-  const locale = await getLocale();
   const t = await getTranslations("hero");
 
   return (

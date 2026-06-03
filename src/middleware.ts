@@ -1,93 +1,73 @@
-﻿import { type NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+import { type NextRequest, NextResponse } from "next/server";
 
-const VALID_LOCALES = ["en","th","es","ru","pt-BR","fr","ja","zh","zh-TW","ar","de","id","ko","it","vi"] as const;
-
-// locale → ISO country (for dev mode locale codes like ?dev=1&country=th)
-const LOCALE_TO_COUNTRY: Record<string, string> = {
-  th: "TH", es: "ES", ru: "RU", "pt-BR": "BR", fr: "FR",
-  ja: "JP", zh: "CN", "zh-TW": "TW", ar: "SA", de: "DE",
-  id: "ID", ko: "KR", it: "IT", vi: "VN", en: "US",
-};
-
-// ISO country → locale (for first-visit auto-detection + dev mode country codes)
 const COUNTRY_LOCALE: Record<string, string> = {
   TH: "th",
+  // Spanish-speaking
   ES: "es", MX: "es", AR: "es", CO: "es", CL: "es", PE: "es", VE: "es",
   UY: "es", PY: "es", BO: "es", EC: "es", CR: "es", PA: "es", DO: "es",
   GT: "es", HN: "es", SV: "es", NI: "es", CU: "es",
+  // Portuguese
   BR: "pt-BR", PT: "pt-BR",
+  // French
   FR: "fr", BE: "fr", CH: "fr", CA: "fr", LU: "fr", MC: "fr",
+  // Japanese
   JP: "ja",
+  // Chinese Simplified
   CN: "zh",
+  // Chinese Traditional
   TW: "zh-TW", HK: "zh-TW", MO: "zh-TW",
+  // Arabic
   SA: "ar", AE: "ar", EG: "ar", KW: "ar", QA: "ar",
   BH: "ar", OM: "ar", JO: "ar", LB: "ar", MA: "ar",
   DZ: "ar", TN: "ar", LY: "ar", IQ: "ar", SY: "ar", YE: "ar",
+  // German
   DE: "de", AT: "de",
+  // Indonesian
   ID: "id",
+  // Korean
   KR: "ko",
+  // Italian
   IT: "it",
+  // Vietnamese
   VN: "vi",
+  // Russian
   RU: "ru", UA: "ru", KZ: "ru", BY: "ru",
 };
 
-function patchCookieLocale(req: NextRequest, locale: string): Headers {
-  const reqHeaders = new Headers(req.headers);
-  const existing = req.headers.get("cookie") ?? "";
-  const filtered = existing.split(";").filter(c => !c.trim().startsWith("NEXT_LOCALE="));
-  filtered.push(`NEXT_LOCALE=${locale}`);
-  reqHeaders.set("cookie", filtered.join("; "));
-  return reqHeaders;
-}
+const intlMiddleware = createMiddleware(routing);
 
 export function middleware(req: NextRequest) {
-  const { searchParams } = req.nextUrl;
+  const { pathname } = req.nextUrl;
 
-  // Dev mode: ?dev=1&country=XX — accepts locale codes (th, es, ja...)
-  // OR ISO country codes (TH, FI, PL, GB, US...) for testing geo-gated widgets
-  if (searchParams.get("dev") === "1") {
-    const devParam = searchParams.get("country");
-    if (devParam) {
-      const isLocale = (VALID_LOCALES as readonly string[]).includes(devParam);
-      const asCountryCode = devParam.toUpperCase();
+  // First-visit geo-redirect: if path has no locale prefix and no cookie
+  const hasLocalePrefix = routing.locales.some(
+    (l) => l !== "en" && pathname.startsWith(`/${l}`)
+  );
 
-      if (isLocale) {
-        // e.g. ?dev=1&country=th → locale=th, geo=TH
-        const devCountry = LOCALE_TO_COUNTRY[devParam] ?? "US";
-        const reqHeaders = patchCookieLocale(req, devParam);
-        reqHeaders.set("x-burrowsoft-geo", devCountry);
-        const res = NextResponse.next({ request: { headers: reqHeaders } });
-        res.cookies.set("NEXT_LOCALE", devParam, { maxAge: 60 * 60 * 24 * 365, path: "/", sameSite: "lax" });
-        return res;
-      } else if (/^[A-Z]{2}$/.test(asCountryCode)) {
-        // e.g. ?dev=1&country=FI → geo=FI, locale from COUNTRY_LOCALE (or "en")
-        const devLocale = COUNTRY_LOCALE[asCountryCode] ?? "en";
-        const reqHeaders = patchCookieLocale(req, devLocale);
-        reqHeaders.set("x-burrowsoft-geo", asCountryCode);
-        const res = NextResponse.next({ request: { headers: reqHeaders } });
-        res.cookies.set("NEXT_LOCALE", devLocale, { maxAge: 60 * 60 * 24 * 365, path: "/", sameSite: "lax" });
-        return res;
-      }
+  if (!hasLocalePrefix && !req.cookies.has("NEXT_LOCALE")) {
+    const country =
+      req.headers.get("x-vercel-ip-country") ??
+      req.headers.get("cf-ipcountry") ??
+      "US";
+    const locale = COUNTRY_LOCALE[country] ?? "en";
+    if (locale !== "en") {
+      const url = req.nextUrl.clone();
+      url.pathname = `/${locale}${pathname}`;
+      const res = NextResponse.redirect(url, { status: 302 });
+      res.cookies.set("NEXT_LOCALE", locale, {
+        maxAge: 60 * 60 * 24 * 365,
+        path: "/",
+        sameSite: "lax",
+      });
+      return res;
     }
   }
 
-  if (req.cookies.has("NEXT_LOCALE")) return NextResponse.next();
-
-  const country =
-    req.headers.get("x-vercel-ip-country") ??
-    req.headers.get("cf-ipcountry") ??
-    "US";
-  const locale = COUNTRY_LOCALE[country] ?? "en";
-
-  const res = NextResponse.next();
-  res.cookies.set("NEXT_LOCALE", locale, {
-    maxAge: 60 * 60 * 24 * 365,
-    path: "/",
-    sameSite: "lax",
-  });
-  return res;
+  return intlMiddleware(req);
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon|.*\\..*).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon|BingSiteAuth|.*\\..*).*)"],
 };

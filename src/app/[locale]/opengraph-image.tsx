@@ -19,7 +19,6 @@ export default function OgImage() {
           fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         }}
       >
-        {/* Mascot placeholder ring */}
         <div
           style={{
             width: 180,
@@ -36,7 +35,6 @@ export default function OgImage() {
         >
           📰
         </div>
-
         <div
           style={{
             fontSize: 80,
@@ -48,7 +46,6 @@ export default function OgImage() {
         >
           InsightMole
         </div>
-
         <div
           style={{
             fontSize: 28,

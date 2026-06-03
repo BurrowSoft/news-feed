@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { SITE_NAME } from "@/lib/seo";
 
 function decodeArticleId(id: string): string {
@@ -11,7 +11,7 @@ function decodeArticleId(id: string): string {
 }
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
   searchParams: Promise<{
     title?: string;
     source?: string;
@@ -36,7 +36,9 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 }
 
 export default async function ArticlePage({ params, searchParams }: PageProps) {
-  const { id } = await params;
+  const { locale, id } = await params;
+  setRequestLocale(locale);
+
   const sp = await searchParams;
   const t = await getTranslations("article");
 
