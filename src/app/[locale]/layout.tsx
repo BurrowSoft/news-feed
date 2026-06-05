@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import {
+  Inter,
   Sarabun,
   Noto_Sans_JP,
   Noto_Sans_SC,
@@ -19,6 +20,7 @@ import { routing } from "@/i18n/routing";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/seo";
 import "../globals.css";
 
+const inter   = Inter({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-inter", display: "swap" });
 const sarabun = Sarabun({ subsets: ["thai", "latin"], weight: ["400", "600", "700"], variable: "--font-sarabun", display: "swap" });
 const notoJP  = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-noto-jp", display: "swap" });
 const notoSC  = Noto_Sans_SC({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-noto-sc", display: "swap" });
@@ -27,7 +29,7 @@ const notoKR  = Noto_Sans_KR({ subsets: ["latin"], weight: ["400", "700"], varia
 const notoAR  = Noto_Sans_Arabic({ subsets: ["arabic"], weight: ["400", "700"], variable: "--font-noto-ar", display: "swap" });
 
 const ALL_FONT_VARS = [
-  sarabun.variable, notoJP.variable, notoSC.variable,
+  inter.variable, sarabun.variable, notoJP.variable, notoSC.variable,
   notoTC.variable, notoKR.variable, notoAR.variable,
 ].join(" ");
 
@@ -138,7 +140,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   const activeFont = LOCALE_FONT[locale];
-  const bodyStyle = activeFont ? { fontFamily: activeFont } : {};
+  const bodyStyle = { fontFamily: activeFont ?? "var(--font-inter), sans-serif" };
 
   return (
     <html
@@ -171,14 +173,14 @@ export default async function LocaleLayout({
             >
               <Link href="/" className="flex items-center gap-2.5">
                 <Image
-                  src="/mascot.svg"
+                  src="/news.png"
                   alt="InsightMole"
-                  width={36}
-                  height={36}
+                  width={40}
+                  height={40}
                   className="shrink-0"
                   priority
                 />
-                <span className="text-lg font-bold tracking-tight">{SITE_NAME}</span>
+                <span className="text-lg font-bold tracking-tight text-indigo-600">{SITE_NAME}</span>
               </Link>
               <div className="flex items-center gap-3">
                 <span className="hidden sm:block text-xs text-slate-400">Updated every 15 min</span>
@@ -201,11 +203,10 @@ export default async function LocaleLayout({
                   aria-label="BurrowSoft"
                 >
                   <Image
-                    src="/burrowsoft-logo.svg"
+                    src="/base.png"
                     alt="BurrowSoft"
-                    width={160}
-                    height={32}
-                    unoptimized
+                    width={48}
+                    height={48}
                   />
                 </a>
                 <nav aria-label="BurrowSoft products" className="flex flex-wrap gap-4 text-sm text-slate-500">
