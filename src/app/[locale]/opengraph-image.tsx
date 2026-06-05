@@ -19,7 +19,7 @@ export default async function OGImage() {
           gap: 40,
           width: "100%",
           height: "100%",
-          background: "linear-gradient(135deg, #78350f 0%, #92400e 100%)",
+          background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)",
           fontFamily: "sans-serif",
         }}
       >
@@ -30,7 +30,7 @@ export default async function OGImage() {
             InsightMole
           </span>
           <span style={{ fontSize: 28, color: "#94a3b8" }}>
-            Clean Search. No Ads. No Sign-Up.
+            Trending News & Top Headlines
           </span>
         </div>
       </div>
