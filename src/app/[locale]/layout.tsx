@@ -13,7 +13,8 @@ import {
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { RegionalFloatingAd, AppHeader, AppFooter } from "@burrowsoft/shared";
+import { headers } from "next/headers";
+import { detectCountry, getCountryName, RegionalFloatingAd, AppHeader, AppFooter } from "@burrowsoft/shared";
 import { Link } from "@/i18n/navigation";
 import { LocaleLanguageSelector } from "@/components/LocaleLanguageSelector";
 import { routing } from "@/i18n/routing";
@@ -50,41 +51,52 @@ const WEBSITE_SCHEMA = {
   "publisher": { "@type": "Organization", "name": "BurrowSoft", "url": "https://www.burrowsoft.com" },
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: `${SITE_NAME} — Trending News & Top Headlines`,
-    template: `%s | ${SITE_NAME}`,
-  },
-  description: SITE_DESCRIPTION,
-  keywords: ["trending news", "top headlines", "breaking news", "world news", "latest news"],
-  authors: [{ name: SITE_NAME }],
-  creator: SITE_NAME,
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: SITE_URL,
-    siteName: SITE_NAME,
-    title: `${SITE_NAME} — Trending News & Top Headlines`,
-    description: SITE_DESCRIPTION,
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${SITE_NAME}` }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${SITE_NAME} — Trending News & Top Headlines`,
-    description: SITE_DESCRIPTION,
-    images: ["/og-image.png"],
-  },
-  other: { "google-adsense-account": "ca-pub-1009857008755875" },
-  alternates: {
-    canonical: `${BASE}/`,
-    languages: Object.fromEntries([
-      ...routing.locales.map((locale) => [locale, locale === "en" ? `${BASE}/` : `${BASE}/${locale}/`]),
-      ["x-default", `${BASE}/`],
-    ]),
-  },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 } },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const hdrs = await headers();
+  const country = detectCountry(Object.fromEntries(hdrs.entries()));
+  const countryName = getCountryName(country);
+  const desc = `Get the latest news from ${countryName} and around the world. InsightMole aggregates top sources in real time. No paywalls. No sign-up. Always free.`;
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: `${countryName} & World News — InsightMole`,
+      template: `%s | InsightMole`,
+    },
+    description: desc,
+    keywords: ["trending news", "top headlines", "breaking news", "world news", "latest news"],
+    authors: [{ name: SITE_NAME }],
+    creator: SITE_NAME,
+    openGraph: {
+      type: "website",
+      locale: locale.replace("-", "_"),
+      url: locale === "en" ? `${BASE}/` : `${BASE}/${locale}/`,
+      siteName: SITE_NAME,
+      title: `${countryName} & World News — InsightMole`,
+      description: desc,
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: SITE_NAME }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${countryName} & World News — InsightMole`,
+      description: desc,
+      images: ["/og-image.png"],
+    },
+    other: { "google-adsense-account": "ca-pub-1009857008755875" },
+    alternates: {
+      canonical: locale === "en" ? `${BASE}/` : `${BASE}/${locale}/`,
+      languages: Object.fromEntries([
+        ...routing.locales.map((l) => [l, l === "en" ? `${BASE}/` : `${BASE}/${l}/`]),
+        ["x-default", `${BASE}/`],
+      ]),
+    },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 } },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
